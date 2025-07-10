@@ -17,6 +17,7 @@ namespace SharedComponents.Areas
         {
             // We need to be alerted if the currently selected site has changed
             StaticData.SelectedBeachChanged += SelectedBeachChanged;
+            StaticData.ActiveFilterChanged += SelectedFilterChanged;
 
             // We need to wait for parent to finish loading beach data
             await base.OnInitializedAsync();
@@ -122,7 +123,23 @@ namespace SharedComponents.Areas
         {
             module.InvokeAsync<string>("change_marker_to_selected", newSelection.ID);
         }
+        private void SelectedFilterChanged(bool activeOnly)
+        {
+            // If there was no previously selected beach then don't mess with it
+            // See if we had a previously selected marker
+            if (!activeOnly && _lastSelectedBeach is not null && !_lastSelectedBeach.IsMonitored)
+            {
+                RestoreMarkerToNormal(_lastSelectedBeach);
+                _lastSelectedBeach = null; // If we are filtering to active only, then clear the last selected beach
 
+            }
+            // Hide all markers that are not currently monitored
+            foreach (var beach in Parent.Beaches.Where(b => !b.IsMonitored))
+            {
+                module.InvokeAsync<string>(activeOnly? "hide_marker" : "show_marker", beach.ID);
+            }
+            StateHasChanged();
+        }
         public async ValueTask DisposeAsync()
         {
             if (module is not null)

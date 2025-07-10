@@ -19,6 +19,7 @@ public static class StaticData
     public static event Action<IEnumerable<BeachData>>? BeachesLoaded;
     // Callback/event to signal when selected beach has been changed
     public static event Action<BeachData?>? SelectedBeachChanged;
+    public static event Action<bool>? ActiveFilterChanged;
 
     private static IEnumerable<BeachData>? beaches;
     public static IEnumerable<BeachData>? Beaches { get { return beaches; } set => beaches = value; }
@@ -70,5 +71,10 @@ public static class StaticData
         SelectedBeach = beach ?? SelectedBeach;
         SelectedBeachChanged?.Invoke(SelectedBeach);
 
+    }
+
+    internal static void SetActiveFilter(bool activeonly)
+    {
+        StaticData.ActiveFilterChanged?.Invoke(activeonly ? true : false);
     }
 }

@@ -9,12 +9,12 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\appsettings.json" />
-    <Content Remove="wwwroot\sample-data\BeachData.json" />
+    <Content Remove="wwwroot\sample-data\beachdata.json" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="wwwroot\appsettings.json" />
-    <EmbeddedResource Include="wwwroot\sample-data\BeachData.json">
+    <EmbeddedResource Include="wwwroot\sample-data\beachdata.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

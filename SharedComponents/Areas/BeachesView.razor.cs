@@ -8,6 +8,7 @@ namespace SharedComponents.Areas;
 public partial class BeachesView : ComponentBase
 {
     private string island = "Whidbey";
+    private bool activeonly = false; // Show all beaches by default- even those not actively monitored
 
     [CascadingParameter] public BeachWrapper Parent { get; set; }
 
@@ -23,6 +24,12 @@ public partial class BeachesView : ComponentBase
     private void OnChange(ChangeEventArgs args)
     {
         island = args.Value?.ToString() ?? "Whidbey";
+    }
+    private void OnChangeActive(ChangeEventArgs args)
+    {
+        activeonly = args?.Value is not null && bool.TryParse(args.Value.ToString(), out var result) && result;
+        StaticData.SetActiveFilter(activeonly);
+        StateHasChanged();
     }
 
     private void HandleRowClick(BeachData beach)

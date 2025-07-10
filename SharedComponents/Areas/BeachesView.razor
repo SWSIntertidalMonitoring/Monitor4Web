@@ -15,11 +15,19 @@
 }  
 else  
 {
-    <div>  
+    <div style="display:inline-block">
+        <div style="display:inline;margin-right:20px">
         <SfRadioButton Label="Whidbey" Name="island" Value="Whidbey" TChecked="string"  
-                       onchange=@OnChange @bind-Checked="island"></SfRadioButton>  
+                       onchange=@OnChange @bind-Checked="island" style="margin-right: 10px"></SfRadioButton>  
         <SfRadioButton Label="Camano" Name="island" Value="Camano" TChecked="string"  
                        onchange=@OnChange @bind-Checked="island"></SfRadioButton>  
+        </div>
+        <div style="display:inline">
+        <SfRadioButton Label="All Sites" Name="activeonly" Value=false TChecked="bool"  
+                       onchange=@OnChangeActive @bind-Checked="activeonly" style="margin-right: 10px"></SfRadioButton>  
+        <SfRadioButton Label="Active Only" Name="activeonly" Value=true TChecked="bool"  
+                       onchange=@OnChangeActive @bind-Checked="activeonly"></SfRadioButton>  
+        </div>
     </div>
     <table class="table table-row-style">
         <thead>  
@@ -31,7 +39,7 @@ else
             </tr>  
         </thead>  
         <tbody>  
-            @foreach (var beach in Parent.Beaches.Where(b => b.Island == island).OrderBy(bo => bo.BeachName))
+            @foreach (var beach in Parent.Beaches.Where(b => b.Island == island && (b.IsMonitored || !activeonly)).OrderBy(bo => bo.BeachName))
             {
                 <tr class="@GetRowclass(beach.ID)" @onclick="() => HandleRowClick(beach)">
                     <td>@beach.BeachName</td>
